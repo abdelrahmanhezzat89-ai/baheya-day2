@@ -289,6 +289,23 @@ var ACTS=[
  how:['Fill the three boxes.','Tap “My plan” below and share it.'],
  fields:[['ap0','1','One thing I will START','One specific habit — e.g. one positive SBI a day'],['ap1','2','One thing I will STOP','e.g. solving every problem myself'],['ap2','3','Who will remind me — and when','Name · date of the first check-in']]}
 ];
+var SIMPLE={
+a1:['Tell a partner what you tried since Day 1',['2 min each: what I tried · what happened.','Partner asks: “What would you keep?”','3 stories to the room.']],
+a2:['Guess the answer — then reveal',['Pick a card.','30 sec: agree one answer.','Tap to reveal · close = +1.']],
+a3:['Write one goal so clearly anyone could check it',['What must improve?','Which number shows it?','Who owns it · when do we check?']],
+a4:['Give one piece of feedback — facts only',['When was it?','What did they do? (camera only)','What did it cause? → ask a question.']],
+a5:['Escalate a real problem in 60 seconds',['Write 4 lines: why now · facts · what I think · decision I need.','Call your partner (the director).','Director repeats back the decision.']],
+a6:['Ask — don’t advise',['Ask your neighbour: “If you had no limits, what would you try?”','Star one question you’ll use this week.']],
+a7:['Coach with questions only — no advice',['Coachee: a small real problem (2 min).','Coach: GROW questions only (5 min).','Observer: tick 3 boxes · one tip. Rotate.']],
+a8:['Plan one coaching chat for next week',['Pick one person.','Write their Goal + Reality.','Write 2 questions + a date.']],
+a9:['Score your team on 12 needs',['Tap 1–5 for each — gut feeling.','See your two lowest.','Pick one 7-day action.']],
+a10:['Write a specific thank-you',['When · what they did · the difference.','Read it in 15 seconds.','Send it today.']],
+a11:['Plan how the habit will stick',['Day 30: my habit.','Day 60: what my manager sees.','Day 90: the result I report.']],
+a12:['Fix a tired team using both days’ tools',['Read the case.','20 min: answer 4 boxes.','2 min present · vote (not your own).']],
+a13:['Re-rate your confidence',['Same 8 items as yesterday · 1–5.','Which one moved most?']],
+a14:['Six quick questions',['Answer alone.','Tap to check.']],
+a15:['Commit to one change',['One thing I’ll START.','One thing I’ll STOP.','Who reminds me · when. Then: My plan → Send.']]};
+ACTS.forEach(function(a){var x=SIMPLE[a.id];if(x){a.why=x[0];a.how=x[1]}});
 var MODS=[['Opening','Opening','09:00'],['M5 · Deliver','Managing performance','09:15'],['M6 · Coach','Coaching for performance','10:50'],['M7 · Sustain','Performance & engagement','12:35'],['Close','Capstone & close','14:05']];
 
 /* ---------- helpers ---------- */
@@ -327,8 +344,8 @@ function activity(a){
   var n=ACTS.indexOf(a)+1;
   var h=header('Activity '+n+' of '+ACTS.length,esc(a.title),true);
   h+='<div class="ahead"><div class="chip">'+esc(a.mod)+' <span class="min">'+a.min+' min</span> <span class="edtag">'+(ED==='adm'?'Admin':'Medical')+'</span></div><h2>'+esc(a.title)+'</h2><div class="ar">'+a.ar+'</div></div>';
-  h+='<div class="card why"><b>Why we do this</b>'+esc(a.why)+'</div>';
-  h+='<div class="card how"><b class="l">How · '+a.min+' min</b><ol>'+a.how.map(function(x){return '<li><span>'+esc(t(x))+'</span></li>'}).join('')+'</ol></div>';
+  h+='<div class="card why"><b>Your task</b>'+esc(a.why)+'</div>';
+  h+='<div class="card how"><b class="l">Steps · '+a.min+' min</b><ol>'+a.how.map(function(x){return '<li><span>'+esc(t(x))+'</span></li>'}).join('')+'</ol></div>';
   if(a.tip)h+='<div class="hint">💡 '+esc(a.tip)+'</div>';
   if(a.tool){h+='<div class="card tool"><b class="l">'+esc(a.tool.label)+'</b>';
     if(a.tool.letters)h+='<div class="letters">'+a.tool.letters.map(function(l){return '<div class="lt"><span class="L">'+l[0]+'</span><div><b>'+esc(l[1])+'</b><em>'+esc(l[2])+'</em></div></div>'}).join('')+'</div>';
