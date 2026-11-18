@@ -304,7 +304,7 @@ function stopTimer(){if(tId){clearInterval(tId);tId=null}}
 function home(){
   var done=ACTS.filter(isDone).length;
   var h=header('Leadership & Team Management','Day 2 · Activities',false);
-  h+='<div class="hero"><span class="d">DAY 2 OF 2</span><h1>From clarity to commitment.</h1><div class="ar">من الوضوح إلى الالتزام</div><p>Your phone is your workbook today. Answers stay on this phone only.</p></div><div class="wrap">';
+  h+='<div class="hero"><span class="d">DAY 2 OF 2</span><h1>From clarity to commitment.</h1><div class="ar">من الوضوح إلى الالتزام</div><p>Your phone is your workbook today. Answers stay on this phone until you choose to send them to the facilitator.</p></div><div class="wrap">';
   h+='<div class="lbl" style="margin-top:2px">My group</div><div class="seg"><button data-ed="med" class="'+(ED==='med'?'on':'')+'">Medical managers</button><button data-ed="adm" class="'+(ED==='adm'?'on':'')+'">Administrative managers</button></div>';
   h+='<div class="lbl">My name</div><input class="name" id="nm" placeholder="Your name (for your plan)" value="'+esc(store.get('name')||'')+'">';
   h+='<div class="prog"><div class="bar"><i style="width:'+(done/ACTS.length*100)+'%"></i></div>'+done+' / '+ACTS.length+' done</div>';
@@ -400,7 +400,7 @@ function plan(){
   var p=planText();
   var h=header('Day 2 · '+(ED==='adm'?'Administrative':'Medical'),'My plan',true);
   h+='<div class="ahead"><div class="chip">Everything you wrote today</div><h2>'+(p.name?esc(p.name)+'’s plan':'My plan')+'</h2><div class="ar">خطتي</div></div>';
-  h+='<div class="card why"><b>Share it</b>Send it to the facilitator — it’s used for your Day 30 and Day 60 check-ins. Keep a copy for yourself.</div><div class="plan">';
+  h+='<div class="card why"><b>Share it</b>Send it to the facilitator on WhatsApp — it feeds today’s results dashboard and your Day 30 / 60 check-ins. You can send again later; the newest message counts.</div><div class="plan">';
   p.sec.forEach(function(s){h+='<h3>'+esc(s[0])+'</h3><div class="pb'+(s[1]?'':' empty')+'">'+(s[1]?esc(s[1]):'Not filled yet')+'</div>'});
   var txt=fullText(p);
   h+='</div><div class="btns"><a class="btn wa" href="https://wa.me/?text='+encodeURIComponent(txt)+'" target="_blank" rel="noopener">Send on WhatsApp</a><button class="btn sec" data-copyall="1">Copy text</button></div>';
@@ -408,7 +408,16 @@ function plan(){
   app.innerHTML=h;
   nav.innerHTML='<div class="in"><button data-go="">‹ All activities</button></div>';
 }
-function fullText(p){return 'Baheya Leadership · Day 2 — '+(p.name||'My plan')+' ('+(ED==='adm'?'Admin':'Medical')+')\n\n'+p.sec.filter(function(s){return s[1]}).map(function(s){return '▪ '+s[0]+'\n'+s[1]}).join('\n\n')}
+function fullText(p){return 'Baheya Leadership · Day 2 — '+(p.name||'My plan')+' ('+(ED==='adm'?'Admin':'Medical')+')\n\n'+p.sec.filter(function(s){return s[1]}).map(function(s){return '▪ '+s[0]+'\n'+s[1]}).join('\n\n')+'\n\n— Results code for the facilitator dashboard (please don\'t edit) —\n'+resultsCode()}
+
+var KEYS=(function(){var k=['name','re1','re2','dc0','dc1','dc2','dc_ok','sb1','sb2','sb3','sb4','sbk1','sbk2','sbk3','sbk4','sr1','sr2','sr3','sr4','sr_ok','gr1','gr2','gr3','gr4','ha','heatlow','ps1','ps2','ps3','su1','su2','su3','cp1','cp2','cp3','cp4','ap0','ap1','ap2','qscore'];
+  var i,j;for(i=0;i<4;i++)for(j=0;j<3;j++)k.push('st'+i+j);for(i=1;i<=3;i++){for(j=0;j<3;j++)k.push('ob'+i+'_'+j);k.push('obtip'+i)}
+  for(i=0;i<12;i++)k.push('hm'+i);for(i=0;i<8;i++)k.push('cf'+i);for(i=0;i<6;i++)k.push('qz'+i);for(i=1;i<=15;i++)k.push('done-a'+i);return k})();
+function devId(){var d=store.get('dev');if(!d){d=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);store.set('dev',d)}return d}
+function resultsCode(){var d={};KEYS.forEach(function(k){var v=store.get(k);if(v!=null&&v!==''&&!(v==='0'&&!/^qz/.test(k)))d[k]=v});
+  var o={v:1,id:devId(),e:ED,t:Date.now(),d:d};var js=JSON.stringify(o);var b64;
+  try{var bytes=new TextEncoder().encode(js);var bin='';for(var i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);b64=btoa(bin)}catch(e){b64=btoa(unescape(encodeURIComponent(js)))}
+  return '#BH2:'+b64.replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')+'#'}
 
 /* ---------- routing & events ---------- */
 function route(){stopTimer();var h=(location.hash||'').slice(1);var a=ACTS.filter(function(x){return x.id===h})[0];
